@@ -1,0 +1,128 @@
+<h1>Welcome to BandRockr!</h1>
+
+<% if !@band_profile %>
+	<div class="alert alert-warning">
+		<h4>You don't have a profile yet! Create your band profile now!</h4>
+		<br>
+		<%= link_to "Create profile", new_band_profile_path, class: 'btn btn-success' %>
+	</div>
+<% else %>
+	<h2><%= @band_profile.name %>'s Profile</h2>
+	<p><strong>Name:</strong> <%= @band_profile.name %></p>
+	<p><strong>Info:</strong> <%= @band_profile.info %></p>
+	<p><%= link_to "Edit band profile", edit_band_profile_path(@band_profile), class: 'btn btn-warning' %></p>
+
+	<hr>
+	<h3>Band links</h3>
+	<% if @band_profile.links.count > 0 %>
+		<h3><%= @band_profile.name %>'s Links</h3>
+		<% @band_profile.links.each do |link| %>
+			<p><%= link_to link.title, link.url %></p>
+		<% end %>
+	<% end %>
+	<p><%= link_to "Add links", new_link_path, class: 'btn btn-warning' %></p>
+
+	<hr>
+
+	<h3>Band members</h3>
+	<% if @members.count > 0 %>
+
+		<% @members.each do |member| %>
+			<div class="container">
+				<%= image_tag member.image, class: "pull-left" %>
+				<p><strong><%= member.name %></strong></p>
+				<p><%= member.info %></p>
+				<p><%= link_to "Edit member", edit_member_path(member), class: 'btn btn-warning' %></p>
+				<% if member.links.count > 0 %>
+					<% member.links.each do |link| %>
+						<p><%= link_to link.title, link.url %></p>
+					<% end %>
+				<% end %>
+				<p><%= link_to "Add links", new_link_path, class: 'btn btn-warning' %></p>
+			</div>
+		<% end %>
+	<% end %>
+	<p><%= link_to "Add band members", new_member_path, class: 'btn btn-warning' %></p>
+
+	<hr>
+	<h2>Gigs</h2>
+	<% if @gigs.count > 0 %>
+
+
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Gig name</th>
+					<th>Date</th>
+					<th>Location</th>
+					<th>Status</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @gigs.each do |gig| %>
+					<tr>
+						<td><%= link_to gig.title, gig %></td>
+						<td><%= gig.date.strftime("%A, %e %B %Y") %></td>
+						<td><%= gig.location %></td>
+						<td>
+							<% if gig.date < Date.today %> 
+								Archived 
+							<% else %> 
+								Upcoming
+							<% end %>
+						</td>
+						<td><%= link_to "Edit", edit_gig_path(gig), class: 'btn btn-warning' %></td>
+						<td><%= link_to 'Destroy', gig, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	<% end %>
+	<p><%= link_to "Add a gig", new_gig_path, class: 'btn btn-warning' %></p>
+
+	<hr>
+
+	<h2>Photos</h2>
+	<% if @photos %>
+		<%= link_to "Photo library", photos_path, class: 'btn btn-primary' %>
+	<% end %>
+
+	<%= link_to "Add a photo", new_photo_path, class: 'btn btn-warning' %>
+
+	<hr>
+
+	<h2>Albums</h2>
+	<% if @albums.count > 0 %>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Title</th>
+					<th>Tracks</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<% @albums.each do |album| %>
+					<tr>
+						<td><%= album.title %></td>
+						<td>
+							<% if album.tracks.count > 0 %>
+								<% album.tracks.each do |track| %>
+									<p><%= track.title %> [<%= link_to "Edit", edit_track_path(track) %>]</p>
+								<% end %>
+							<% end %>
+							<%= link_to "Add a track", new_track_path, class: 'btn btn-warning' %>
+						</td>
+						<td><%= link_to "Edit", edit_album_path(album), class: 'btn btn-warning' %></td>
+				        <td><%= link_to 'Destroy', album, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+				    </tr>
+				<% end %>
+			</tbody>
+		</table>
+	<% end %>
+	<p><%= link_to "Add an album", new_album_path, class: 'btn btn-warning' %></p>
+
+<% end %>
