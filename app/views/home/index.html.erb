@@ -1,3 +1,5 @@
 <h3>Home</h3>
 <h2>Recent Photos</h2>
+<% if @photo %>
 <p><%= image_tag @photo.image %></p>
+<% end %>
